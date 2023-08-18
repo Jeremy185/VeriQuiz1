@@ -1,45 +1,21 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 08/17/2023 04:48:03 PM
-// Design Name: 
-// Module Name: Registros
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
-
-module Registros#(
-    parameter WIDHT = 32, DEPTH = 32
-    )
+module Registros#( parameter WIDTH = 32, DEPTH = 16 )
     (
-    input  logic                            clk_i,
     input  logic                            rst_i,
     input  logic                            push_i,
-    input  logic [WIDHT - 1:0]              data_i,  //Unico dato que entra desde abajo
-    
-    output logic [WIDHT - 1:0][DEPTH - 1:0] data_o   //Salida de este modulo
+    input  logic [WIDTH - 1:0]              data_i,  // Dato que entra al primer flip flop  
+      
+    output logic [WIDTH - 1:0][DEPTH - 1:0] data_o   //Salida de este modulo.
     );
     
     genvar i;
     
     generate 
-        for (i = 0; i < DEPTH; i = i + 1)begin: depth
+        for (i = 0; i < DEPTH; i = i + 1)begin: register
         
             if (i == 0)begin //Mete el dato en el primer registro 
-                Registro regs(
-                    .clk_i      (clk_i),
+                Registro #(WIDTH) regs(
                     .rst_i      (rst_i),
                     .push_i     (push_i),
                     .data_i     (data_i),
@@ -47,8 +23,7 @@ module Registros#(
                     );
                     
             end else begin //
-                Registro regs(
-                    .clk_i      (clk_i),
+                Registro #(WIDTH) regs(
                     .rst_i      (rst_i),
                     .push_i     (push_i),
                     .data_i     (data_o[i - 1]),  //Ejemplo: i 

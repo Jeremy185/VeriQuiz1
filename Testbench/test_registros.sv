@@ -29,22 +29,30 @@ module test_registros(
     logic                     rst_i = 1;                                        
     logic                     push_i = 0;                                       
     logic [31:0]              data_i = '0;  //Unico dato que entra desde abajo   
-                                                                                   
-    logic [31:0][31:0] data_o;   //Salida de este modulo        
+    logic                     pop_i=0; 
+    logic                     full_o=0;  
+    logic                     pnding_o=0;                                                                           
+    logic [31:0]              data_o;   //Salida de este modulo        
     
     initial begin
         clk_i = 0;
         forever #5 clk_i=~clk_i;
     end       
     
-    Registros dut(
-        .clk_i  (clk_i),
-        .rst_i  (rst_i),
-        .push_i (push_i),
-        .data_i (data_i),
-                
-        .data_o (data_o)
-    );
+    fifo_top dut(
+    
+        .clk_i    (clk_i),
+        .rst_i    (rst_i),
+        .push_i   (push_i),
+        .data_i   (data_i),
+        .pop_i    (pop_i),
+                  
+        .data_o   (data_o),
+        .full_o   (full_o),
+        .pnding_o (pnding_o)
+
+       );
+   
     
     initial begin
         #100
@@ -53,7 +61,7 @@ module test_registros(
         rst_i = 1;
         #100
         
-        data_i = 31'hF2F2;
+        data_i = 31'hF2F277;
         #100
         push_i = 1;
         #10
@@ -78,6 +86,65 @@ module test_registros(
         push_i = 1;
         #10
         push_i = 0;
+        
+        data_i = 31'h2222;
+        #100
+        push_i = 1;
+        #10
+        push_i = 0;
+       
+        #100
+        pop_i = 1;
+        #10
+        pop_i = 0;
+        
+        #100
+        pop_i = 1;
+        #10
+        pop_i = 0;
+        
+        #100
+        pop_i = 1;
+        #10
+        pop_i = 0;
+        
+        #100
+        pop_i = 1;
+        #10
+        pop_i = 0;
+        
+        #100
+        pop_i = 1;
+        #10
+        pop_i = 0;
+        
+        data_i = 31'hA1A1;
+        #100
+        push_i = 1;
+        #10
+        push_i = 0;
+        #10
+        
+        data_i = 31'hFFFF;
+        #100
+        push_i = 1;
+        #10
+        push_i = 0;
+        
+        data_i = 31'h2222;
+        #100
+        push_i = 1;
+        #10
+        push_i = 0;
+        
+        data_i = 31'h2222;
+        #100
+        push_i = 1;
+        #10
+        push_i = 0;
+        
+                
+    
     
     end
     

@@ -13,6 +13,10 @@ module Registro #( parameter N = 32)
     
         if(!rst_i)begin //Reset
             data_o <= '0;    
+            
+        end else if (push_i) begin
+            data_o <= data_i;
+            
         end else //Si no recibe nada
             data_o <= data_o;
     end

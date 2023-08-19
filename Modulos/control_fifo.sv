@@ -69,7 +69,7 @@ module control_fifo #(parameter WIDTH = 32, DEPTH = 16)
             endcase
         end
         
-        pnding_o <= (count > '0 && selmux_o < (DEPTH - 1)) ? {1'b1} : {1'b0}; 
+        pnding_o <= (count == '0) ? {1'b1} : {1'b0}; 
         full_o <= (selmux_o == DEPTH-1) ? {1'b1} : {1'b0};
     
     end

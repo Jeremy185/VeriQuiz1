@@ -9,9 +9,9 @@ module Registro #( parameter N = 32)
     );
     
     //Se crea el registro parametrizable
-    always_ff@(posedge push_i or negedge rst_i)begin // Es con reset asincrónico 
+    always_ff@(posedge push_i or negedge rst_i)begin // Es con reset asincronico 
     
-        if(!rst_i)begin //Reset
+        if(!rst_i)begin 
             data_o <= '0;    
             
         end else if (push_i) begin

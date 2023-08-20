@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
-module Registros#( parameter WIDTH = 32, DEPTH = 16 ) //Derecha ancho del vector
-                                                      //Izquierda Tamaño de los registros 
+module Registros#( parameter WIDTH = 32, DEPTH = 4 ) //Derecha ancho del vector
+                                                      //Izquierda Tama?o de los registros 
     (
     input  logic                            rst_i,
     input  logic                            push_i,

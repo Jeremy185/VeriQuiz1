@@ -15,9 +15,10 @@ module fifo_top #(parameter WIDTH = 32, DEPTH = 4)
 
 );
     
-    logic [$clog2(DEPTH) - 1:0]      sel_mux;                // Puntero
+    logic [$clog2(DEPTH) - 1:0]      sel_mux;           // Puntero
     logic [DEPTH - 1:0][WIDTH - 1:0] data_in_mux;       // Dato de salida de los registros hacia el mux, ALGO NO CUADRA EN EL ESQUEMATICO
     logic                            rst_reg_o;
+    logic                            full;
     
     // Maquina de control
     control_fifo #(.WIDTH(WIDTH),.DEPTH(DEPTH)) control(
@@ -25,7 +26,7 @@ module fifo_top #(parameter WIDTH = 32, DEPTH = 4)
         .rst_i    (rst_i),
         .push_i   (push_i),
         .pop_i    (pop_i),
-        .full_o   (full_o),
+        .full_o   (full),
         .pnding_o (pnding_o),
         .selmux_o (sel_mux),
         .rst_reg_o(rst_reg_o)
@@ -36,13 +37,13 @@ module fifo_top #(parameter WIDTH = 32, DEPTH = 4)
     Registros #(.WIDTH(WIDTH), .DEPTH(DEPTH)) registros
      (
         .rst_i          (rst_i&~rst_reg_o),
-        .push_i         (push_i),
+        .push_i         (push_i & ~full),
         .data_i         (data_i),   
         .data_o         (data_in_mux)
         );
         
         
     assign data_o = data_in_mux [sel_mux]; // selecciona unicamente el valor que indica el indice 
-    
+    assign full_o = full;
     
 endmodule

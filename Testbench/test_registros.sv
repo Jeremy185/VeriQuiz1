@@ -1,153 +1,199 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 08/17/2023 05:09:43 PM
-// Design Name: 
-// Module Name: test_registros
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+//default_nettype none
+`define BITS 32
+`define DEPTH 4
+//`define TESTING
+//include "fifo_top.sv"
 
+module test_registros;
+  
+// Inputs de la FIFO
+logic                clk;                              
+logic                rst;                                        
+logic                push;                                       
+logic [`BITS - 1:0]  data_in;
 
-module test_registros(
-
-    );
+// Salidas de la FIFO     
+logic                pop; 
+logic                full;  
+logic                pnding;                                                                           
+logic [`BITS - 1:0]  data_out;           
     
+// Instancia de la FIFO       
+fifo_top dut(
+    .clk_i    (clk),
+    .rst_i    (rst),
+    .push_i   (push),
+    .data_i   (data_in),
+    .pop_i    (pop),        
+    .data_o   (data_out),
+    .full_o   (full),
+    .pnding_o (pnding)
+
+);
+    
+initial begin
+    clk = 0;
+    rst = 0;
+    data_in = '0; 
+    push = 0;
+    pop = 0;
    
-    logic                     clk_i = 0;                              
-    logic                     rst_i = 1;                                        
-    logic                     push_i = 0;                                       
-    logic [31:0]              data_i = '0;  //Unico dato que entra desde abajo   
-    logic                     pop_i=0; 
-    logic                     full_o=0;  
-    logic                     pnding_o=0;                                                                           
-    logic [31:0]              data_o;   //Salida de este modulo        
-    
-    initial begin
-        clk_i = 0;
-        forever #5 clk_i=~clk_i;
-    end       
-    
-    fifo_top dut(
-    
-        .clk_i    (clk_i),
-        .rst_i    (rst_i),
-        .push_i   (push_i),
-        .data_i   (data_i),
-        .pop_i    (pop_i),
-                  
-        .data_o   (data_o),
-        .full_o   (full_o),
-        .pnding_o (pnding_o)
+    #10;         
+end   
 
-       );
-   
+// Creación del reloj
+always #5 clk = ~clk;
+
+always@(posedge clk) begin
+    test ();
+end
+
+int ciclo = 1;
+int dato = 32'h000A;
+int cont = 0;
+int cont2 = `DEPTH;
+
+    task test();
+
     
-    initial begin
-        #100
-        rst_i = 0;
-        #100
-        rst_i = 1;
-        #100
+    case (ciclo)
+        1: begin
+            rst = 1'b1;
+            pop = 1'b0;
+            push = 1'b0;
+            data_in = 'b0;
+            ciclo = 2;    
+        end
         
-        data_i = 31'hF2F277;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        #10
+        2: begin    // ---------->  LLENADO
+            rst = 1'b1;
+            pop = 1'b0;
+            push = ~push;
+            data_in = dato;
+            if (push == 1) begin
+                //$display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
+            end else if ( full == 1) begin
+                ciclo = 3;
+            end else begin
+                dato = dato + 1;
+            end
+        end
         
-        data_i = 31'hA1A1;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        #10
+        3: begin  // ------------> VACIADO
+            rst = 1'b1;         
+            push = 1'b0;
+            pop = ~pop;
+            data_in = dato;
+            if (pop == 1) begin
+                //$display("En el tiempo %g se hizo pop al dato: %g count %g",$time,data_out,test_registros.dut.control.count);
+            end
+            if (pnding == 0) begin        
+                ciclo = 4;
+                #10; 
+                pop = 1'b0;
+                #10;  
+            end
+        end
         
-        data_i = 31'hFFFF;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
+        4: begin            // VUELVO A LLENAR       
+            rst = 1'b1;
+            pop = 1'b0;
+            push = ~push;
+            data_in = dato;
+            if (push == 1) begin
+                //$display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
+            end else if ( full == 1) begin
+                ciclo = 5;
+                #10; 
+                push = 1'b0;
+                #10; 
+            end else begin
+                dato = dato + 1;
+            end
+         end
+         
+        5: begin      // -----------> PUSH CUANDO YA ESTÁ LLENA
+            rst = 1'b1;
+            pop = 1'b0;
+            push = 1'b1;
+            data_in = dato;
+            ciclo = 6;
+        end
         
-        data_i = 31'h2222;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        
-        data_i = 31'h2222;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-       
-        #100
-        pop_i = 1;
-        #10
-        pop_i = 0;
-        
-        #100
-        pop_i = 1;
-        #10
-        pop_i = 0;
-        
-        #100
-        pop_i = 1;
-        #10
-        pop_i = 0;
-        
-        #100
-        pop_i = 1;
-        #10
-        pop_i = 0;
-        
-        #100
-        pop_i = 1;
-        #10
-        pop_i = 0;
-        
-        data_i = 31'hA1A1;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        #10
-        
-        data_i = 31'hFFFF;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        
-        data_i = 31'h2222;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        
-        data_i = 31'h2222;
-        #100
-        push_i = 1;
-        #10
-        push_i = 0;
-        
-                
-    
-    
-    end
-    
-    
-    
+        6: begin       // -----------> RESET CUANDO ESTA LLENA
+            rst = 1'b0;
+            pop = 1'b0;
+            push = 1'b0;
+            ciclo = 7;
+         end
+                    
+         7: begin       // -----------> POP CUANDO ESTA VACIA
+            rst = 1'b1;
+            pop = 1'b1;
+            push = 1'b0;
+            data_in = dato;
+            ciclo = 8;
+         end
+         
+         8: begin       // -----------> RESET CUANDO ESTA VACIA
+            rst = 1'b0;
+            rst = 1'b0;
+            pop = 1'b0;
+            push = 1'b0;
+            ciclo = 9;
+         end
+         
+         9: begin            //  --------> LLENO A LA MITAD       
+            rst = 1'b1;
+            pop = 1'b0;
+            push = ~push;
+            data_in = dato;
+            if (push == 1) begin
+                //$display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
+                cont = cont + 1;
+            end else if ( cont == (`DEPTH/2)) begin
+                ciclo = 10;
+            end else begin
+                dato = dato + 1;
+            end
+         end
+         
+         10: begin           // ----------> RESET CUANDO ESTA A LA MITAD
+            rst = 1'b0;
+            pop = 1'b0;
+            push = 1'b0;
+            ciclo = 11;
+            cont = 0;
+         end
+         
+         11: begin         // ------------> PUSH Y POP ALEATORIOS
+            rst = 1'b1;
+            data_in = $urandom & 3'b111;
+            pop = $urandom & 1'b1;
+            push = $urandom & 1'b1;
+            if(cont2 == 0) begin
+                ciclo = 12;
+            end else begin
+                cont2 = cont2 - 1;
+            end
+            #10;
+         end
+         
+         12: begin        // ------------> PUSH Y POP AL MISMO TIEMPO
+            rst = 1'b1;
+            pop = 1'b1;
+            push = 1'b1;
+            ciclo = 13;
+         end
+         
+         13: begin
+            rst = 1'b1;
+            pop = 1'b0;
+            push = 1'b0;
+            data_in = '0;
+         end
+         
+    endcase
+endtask
 endmodule

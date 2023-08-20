@@ -14,7 +14,8 @@ module control_fifo #(parameter WIDTH = 32, DEPTH = 16)
     
     );
        
-    logic [$clog2(DEPTH) - 1:0] count;
+    logic [$clog2(DEPTH) - 1:0] count; // Es el puntero del dato que quiero leer
+    
     always_ff@(posedge clk_i or negedge rst_i) begin
         if (!rst_i)begin
             count    <= 0;
@@ -69,8 +70,9 @@ module control_fifo #(parameter WIDTH = 32, DEPTH = 16)
             endcase
         end
         
-        pnding_o <= (count == '0) ? {1'b1} : {1'b0}; 
-        full_o <= (selmux_o == DEPTH-1) ? {1'b1} : {1'b0};
+        //pnding_o <= (count > '0 && selmux_o < (DEPTH - 1)) ? {1'b1} : {1'b0}; 
+        pnding_o <= (count == 0) ? {1'b0} : {1'b1};  // Se desactiva cuando ya no hay elementos en los registros
+        full_o <= (selmux_o == DEPTH-1 && count == DEPTH-1) ? {1'b1} : {1'b0};
     
     end
  endmodule       

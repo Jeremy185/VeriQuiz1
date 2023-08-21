@@ -10,11 +10,11 @@ module test_registros;
 // Inputs de la FIFO
 logic                clk;                              
 logic                rst;                                        
-logic                push;                                       
+logic                push;  
+logic                pop;                                     
 logic [`BITS - 1:0]  data_in;
 
 // Salidas de la FIFO     
-logic                pop; 
 logic                full;  
 logic                pnding;                                                                           
 logic [`BITS - 1:0]  data_out;           
@@ -72,7 +72,7 @@ int cont2 = `DEPTH;
             push = ~push;
             data_in = dato;
             if (push == 1) begin
-                //$display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
+                $display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
             end else if ( full == 1) begin
                 ciclo = 3;
             end else begin
@@ -86,7 +86,7 @@ int cont2 = `DEPTH;
             pop = ~pop;
             data_in = dato;
             if (pop == 1) begin
-                //$display("En el tiempo %g se hizo pop al dato: %g count %g",$time,data_out,test_registros.dut.control.count);
+                $display("En el tiempo %g se hizo pop al dato: %g count %g",$time,data_out,test_registros.dut.control.count);
             end
             if (pnding == 0) begin        
                 ciclo = 4;
@@ -102,7 +102,7 @@ int cont2 = `DEPTH;
             push = ~push;
             data_in = dato;
             if (push == 1) begin
-                //$display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
+                $display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
             end else if ( full == 1) begin
                 ciclo = 5;
                 #10; 
@@ -150,7 +150,7 @@ int cont2 = `DEPTH;
             push = ~push;
             data_in = dato;
             if (push == 1) begin
-                //$display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
+                $display("En el tiempo %g se hizo push al dato: %g count %g",$time,dato,test_registros.dut.control.count);
                 cont = cont + 1;
             end else if ( cont == (`DEPTH/2)) begin
                 ciclo = 10;
@@ -172,6 +172,8 @@ int cont2 = `DEPTH;
             data_in = $urandom & 3'b111;
             pop = $urandom & 1'b1;
             push = $urandom & 1'b1;
+            $display("En el tiempo %g push tiene un valor de %g y pop de %g count %g ",$time,push,pop,test_registros.dut.control.count);
+            $display("El dato de entrada es: %g \nEl dato de salida es: %g",data_in,data_out);
             if(cont2 == 0) begin
                 ciclo = 12;
             end else begin

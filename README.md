@@ -19,7 +19,7 @@ module Registro #( parameter N = 32)
 ```
 
 ### 2. Parametros
-- `N`: Indica el tamaño de los registros.
+- `N`: indica el ancho del dato del registro.
 
 ### 3. Entradas y salidas:
 
@@ -49,7 +49,7 @@ module Registros#( parameter WIDTH = 32, DEPTH = 4 ) //Derecha ancho del vector
 
 ### 2. Parametros
 - `DEPTH`: indica la cantidad de registros
-- `WIDTH`: indica el tamaño del registro
+- `WIDTH`: indica el ancho del dato del registro
 
 ### 3. Entradas y salidas:
 
@@ -82,7 +82,7 @@ module control_fifo #(parameter WIDTH = 32, DEPTH = 16)
 
 ### 2. Parametros
 - `DEPTH`: indica la cantidad de registros
-- `WIDTH`: indica el tamaño de la palabra del registro
+- `WIDTH`: indica el ancho del dato del registro
 
 ### 3. Entradas y salidas:
 
@@ -98,7 +98,7 @@ module control_fifo #(parameter WIDTH = 32, DEPTH = 16)
 
 ### 1.4 Modulo "fifo_top"
 
-Modulo que conecta todos los registros con el multiplexor que se establecio como un solo assign que guarda el valor de la salida segun un indice dado por el modulo de contro
+Modulo que conecta todos los registros con el multiplexor que se establecio como un solo assign que guarda el valor de la salida segun un indice dado por el módulo de contro
 
 ### 1. Encabezado del modulo
 
@@ -120,7 +120,7 @@ module fifo_top #(parameter WIDTH = 32, DEPTH = 4)
 
 ### 2. Parametros
 - `DEPTH`: indica la cantidad de registros
-- `WIDTH`: indica el tamaño del registro
+- `WIDTH`: indica el ancho del dato del registro
 
 ### 3. Entradas y salidas:
 
@@ -153,7 +153,7 @@ El testbench de la FIFO se encuentra en la dirección `/Testbench/test_registros
 - Push y pop aleatorios
 - Push y pop al mismo tiempo
 
-  En la siguiente imagen se puede observr el Waveform ejecutado en  `verdi`. En el se observan las señales del importantes del modulo fifo. Se agregaron varias marcas de tiempo que indican cada una de las pruebas mencionadas anteriormente.
+  En la siguiente imagen se puede observar el Waveform ejecutado en  `verdi`. En este se muestran las señales más importantes de la FIFO. Se agregaron varias marcas de tiempo que indican cada una de las pruebas mencionadas anteriormente.
 
 ![wave](Imagenes/waveform.png)
 

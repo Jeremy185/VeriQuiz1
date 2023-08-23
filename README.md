@@ -133,6 +133,11 @@ module fifo_top #(parameter WIDTH = 32, DEPTH = 4)
 - `full_o`: señal que indica que ya los registros estan llenos
 - `pnding_o`: indica si hay datos que pueden ser procesados, si es 0 los registros estan vacios.
 
+### 4. Criterio de diseño
+El diseño de la fifo esta basada en el siguiente diagrama de bloques.
+
+
+
 
 
 

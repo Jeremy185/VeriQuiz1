@@ -155,6 +155,7 @@ El testbench de la FIFO se encuentra en la dirección `/Testbench/test_registros
 
   En la siguiente imagen se puede observr el Waveform ejecutado en  `verdi`. En el se observan las señales del importantes del modulo fifo. Se agregaron varias marcas de tiempo que indican cada una de las pruebas mencionadas anteriormente.
 
+![wave](Imagenes/waveform.png)
 
   En primer lugar se llenan los registros, lo cual toma el tiempo que marca el cursor (M1), en este se puede ver como la señal de `full` se activa, con cuatro pulsos de `push` dado que el `DEPTH` de los registros se inicializó en un valor de 4.
 

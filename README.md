@@ -154,7 +154,20 @@ El testbench de la FIFO se encuentra en la dirección `/Testbench/test_registros
 - Push y pop aleatorios
 - Push y pop al mismo tiempo
 
-  En la siguiente imagen se puede observar el Waveform ejecutado en  `verdi`. En este se muestran las señales más importantes de la FIFO. Se agregaron varias marcas de tiempo que indican cada una de las pruebas mencionadas anteriormente.
+#### Procedimiento
+
+  Para el procedimiento de ejecución de la prueba, se ingresó a la terminal de linux desde el servidor VNC Server, una vez ahí se accedió al directorio `cd /mnt/vol_NFS_rh003/Est_Verif_II2023/JesusRojas_II_2023/Quiz1` y se subió el archivo .sv y se ejecutaron los siguientes comandos:
+  ```Terminal
+source /mnt/vol_NFS_rh003/estudiantes/archivos_config/synopsys_tools.sh;
+
+vcs -Mupdate test_registros.sv -o salida  -full64 -sverilog  -kdb -lca -debug_acc+all -debug_region+cell+encrypt -l log_test +lint=TFIPC-L -cm line+tgl+cond+fsm+branch+assert
+  ```
+Una vez compilado y sin errores, se ejecuta la simulación utilizando el entorno gráfico de `verdi`, con el siguiente comando:
+```
+./salida -gui
+
+```
+  Estando en `verdi` se crea el Waveform para observar las señales. En la siguiente imagen se puede observar el Waveform. En este se muestran las señales más importantes de la FIFO. Se agregaron varias marcas de tiempo que indican cada una de las pruebas mencionadas anteriormente.
 
 ![wave](Imagenes/waveform.png)
 

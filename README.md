@@ -136,7 +136,7 @@ module fifo_top #(parameter WIDTH = 32, DEPTH = 4)
 ### 4. Criterio de diseño
 El diseño de la fifo esta basada en el siguiente diagrama de bloques.
 
-![fifo_BD](Imagenes/block_diagram.png)
+![fifo_BD](https://github.com/Jeremy185/VeriQuiz1/blob/15b142f0191c177260a61b8839d578aafa6e2aef/Imagenes/block_diagram.png)
 
 ### 5. Testbench
 

@@ -82,7 +82,7 @@ module control_fifo #(parameter WIDTH = 32, DEPTH = 16)
 
 ### 2. Parametros
 - `DEPTH`: indica la cantidad de registros
-- `WIDTH`: indica el tamaño del registro
+- `WIDTH`: indica el tamaño de la palabra del registro
 
 ### 3. Entradas y salidas:
 
@@ -140,7 +140,34 @@ El diseño de la fifo esta basada en el siguiente diagrama de bloques.
 
 ### 5. Testbench
 
+El testbench de la FIFO se encuentra en la dirección `/Testbench/test_registros.sv`. Para la verificación de la FIFO se realizaron las siguientes pruebas:
 
+- LLenado
+- Vaciado
+- Push cuando ya está lleno
+- Reset cuando ya está lleno
+- Pop cuando está vacía
+- Reset cuando está vacía
+- LLenado por la mitad
+- Reset cuando está por la mitad
+- Push y pop aleatorios
+- Push y pop al mismo tiempo
+
+  En la siguiente imagen se puede observr el Waveform ejecutado en  `verdi`. En el se observan las señales del importantes del modulo fifo. Se agregaron varias marcas de tiempo que indican cada una de las pruebas mencionadas anteriormente.
+
+
+  En primer lugar se llenan los registros, lo cual toma el tiempo que marca el cursor (M1), en este se puede ver como la señal de `full` se activa, con cuatro pulsos de `push` dado que el `DEPTH` de los registros se inicializó en un valor de 4.
+
+  Luego, se procede con el vaciado ( entre los cursores M1 y M2 ) en este se puede observar como la salida `data_out` va cambiando con cada pulso de pop, hasta que la señal de `pnding` baja a cero, lo que indica que ya está vacía.
+
+  Seguido se vuelve a llenar los registros, una vez la señal de `full` se activa, se realiza otro pulso de `push` para el caso de prueba de push estando lleno, observando que salida efectivamente no cambia. Justo de después de la marca M3 se aplica un `reset` estando la fifo llena y luego un `pop` estando la fifo vacía, con lo que se verifica que el dato de salida sigue con un valor de 0. Luego en el tiempo que marca M4 se aplica un `reset` a la fifo vacía. Seguido de esto se vuelve a llenar, pero esta vez a la mitad ( que serían dos datos ), y se aplica el `reset`. Despues de esto en M5 se realizan `push` y `pop` aleatorios, con datos ingresados de manera aleatoria igualmente, observando que el dato de salida se muestra correctamente.
+
+  Por último, en M6 se aplica un `push` y `pop` al mismo tiempo y observando el dato se salida se compruebo que cumple con lo diseñado, es decir que el puntero no cambia.
+
+  
+
+  
+  
 
 
 

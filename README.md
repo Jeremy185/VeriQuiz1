@@ -1,5 +1,6 @@
 # VeriQuiz1 diseño y verificacion de una FIFO
 
+Jeremy Cordoba, Jesus Rojas
 ## 1. Desarrollo
 
 ### 1.1 Modulo "Registro"

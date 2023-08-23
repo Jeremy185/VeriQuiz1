@@ -8,13 +8,13 @@ module Registro #( parameter N = 32)
     output logic [N-1:0] data_o
     );
     
-    //Se crea el registro parametrizable
+    //Se crea un unico registro parametrizable
     always_ff@(posedge push_i or negedge rst_i)begin // Es con reset asincronico 
     
         if(!rst_i)begin 
             data_o <= '0;    
             
-        end else if (push_i) begin
+        end else if (push_i) begin //si recibe algo
             data_o <= data_i;
             
         end else //Si no recibe nada

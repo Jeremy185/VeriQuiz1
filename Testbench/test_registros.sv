@@ -1,9 +1,12 @@
 `timescale 1ns / 1ps
-//default_nettype none
+`default_nettype none
 `define BITS 32
 `define DEPTH 4
-//`define TESTING
-//include "fifo_top.sv"
+`define TESTING
+`include "fifo_top.sv"
+`include "Registro.sv"
+`include "Registros.sv"
+`include "control_fifo.sv"
 
 module test_registros;
   
@@ -33,6 +36,10 @@ fifo_top dut(
 );
     
 initial begin
+
+    $dumpfile("test_registros_tb.vcd");
+    $dumpvars(0, test_registros);
+
     clk = 0;
     rst = 0;
     data_in = '0; 
@@ -42,7 +49,7 @@ initial begin
     #10;         
 end   
 
-// Creación del reloj
+// Creaciï¿½n del reloj
 always #5 clk = ~clk;
 
 always@(posedge clk) begin
@@ -113,7 +120,7 @@ int cont2 = `DEPTH;
             end
          end
          
-        5: begin      // -----------> PUSH CUANDO YA ESTÁ LLENA
+        5: begin      // -----------> PUSH CUANDO YA ESTï¿½ LLENA
             rst = 1'b1;
             pop = 1'b0;
             push = 1'b1;
@@ -194,8 +201,14 @@ int cont2 = `DEPTH;
             pop = 1'b0;
             push = 1'b0;
             data_in = '0;
+            ciclo = 14;
+         end
+         
+         14: begin
+            $finish;
          end
          
     endcase
 endtask
+
 endmodule
